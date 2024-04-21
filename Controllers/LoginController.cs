@@ -4,6 +4,9 @@ using Week4Lab.Repositories;
 
 namespace Week4Lab.Controllers
 {
+    /// <summary>
+    /// Controller responsible for handling user login and generating JWT token.
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class LoginController : Controller
@@ -11,13 +14,22 @@ namespace Week4Lab.Controllers
         private IUserRepository userRepository;
         private AuthController authController;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoginController"/> class.
+        /// </summary>
+        /// <param name="userRepository">The user repository.</param>
+        /// <param name="authController">The authentication controller.</param>
         public LoginController(IUserRepository userRepository, AuthController authController)
         {
             this.userRepository = userRepository;
             this.authController = authController;
         }
 
-        // Handles user login and generates JWT token
+        /// <summary>
+        /// Handles user login and generates JWT token.
+        /// </summary>
+        /// <param name="loginRequest">The login request containing user credentials.</param>
+        /// <returns>An IActionResult representing the result of the login operation.</returns>
         [HttpPost]
         public IActionResult Login([FromBody] LoginRequest loginRequest)
         {

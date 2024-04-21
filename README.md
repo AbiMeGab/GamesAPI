@@ -62,5 +62,50 @@ Delete an existing video game from the repository.
 
 ![alt text](image-11.png)
 
+### LAST UPDATES!
+
+Swagger preview.
+
+![alt text](image-12.png)
+
+### New User and Admin accounts feature
+
+![alt text](image-13.png)
+
+### New restrictions
+
+No duplicates are allowed, authentication restrictions and strong password rules.
+
+![alt text](image-14.png)
+
+![alt text](image-15.png)
+
+![alt text](image-16.png)
+
+Only admin users with their Token can generate other admin accounts and post, update and delete games.
+
+![alt text](image-17.png)
+
+![alt text](image-19.png)
+
+![alt text](image-18.png)
+
+![alt text](image-25.png)
+
+![alt text](image-24.png)
+
+Everybody can register a normal account.
+
+![alt text](image-20.png)
+
+If your account does not exist or your credentials are wrong, we will notify you of the error.
+
+![alt text](image-21.png)
+
+This API was tested on Postman (for learning purposes) and with NUnit6.
+
+![alt text](image-22.png)
+
+![alt text](image-23.png)
 
 Thank you!

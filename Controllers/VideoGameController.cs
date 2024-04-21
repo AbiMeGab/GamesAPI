@@ -1,75 +1,83 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Week4Lab.Models;
 using Week4Lab.Repositories;
 using Week4Lab.Utilities;
 
 namespace Week4Lab.Controllers
 {
+    /// <summary>
+    /// Controller responsible for managing video game-related operations.
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class VideoGameController : ControllerBase
     {
+        private readonly IVideoGameRepository _repository;
 
-        // Repository for video game data
-        private IVideoGameRepository _repository;
-
-        // Constructor to initialize the controller with repository
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VideoGameController"/> class.
+        /// </summary>
+        /// <param name="repository">The repository for video game data.</param>
         public VideoGameController(IVideoGameRepository repository)
         {
             _repository = repository;
         }
 
-        // Get all video games
+        /// <summary>
+        /// Retrieves all video games.
+        /// </summary>
+        /// <returns>The list of video games.</returns>
         [HttpGet]
         public IActionResult Get()
         {
-            // Retrieve all video games from the repository
             var videoGames = _repository.GetAll();
-
-            // Prepare response data for JSON:API format
             var responseData = new List<object>();
 
             foreach (var game in videoGames)
             {
-                // Build the response in JSON:API format.
                 var data = VideoGameResponseBuilder.BuildVideoGameResponseData(game);
                 responseData.Add(data);
             }
 
             var response = VideoGameResponseBuilder.BuildVideoGameResponse(responseData);
-            // Return the response
             return Ok(response);
         }
 
-        // Get a specific video game by ID
+        /// <summary>
+        /// Retrieves a specific video game by ID.
+        /// </summary>
+        /// <param name="id">The ID of the video game.</param>
+        /// <returns>The video game.</returns>
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            // Retrieve the video game by ID from the repository
             var game = _repository.GetById(id);
 
             if (game != null)
             {
-                // Build the response in JSON:API format.
                 var data = VideoGameResponseBuilder.BuildVideoGameResponseData(game);
                 var response = VideoGameResponseBuilder.BuildVideoGameResponse(data);
-                // Return the response
                 return Ok(response);
             }
             else
             {
-                // Return 404 Not Found if the video game is not found
                 return NotFound("No videogames were found.");
             }
         }
 
-        // Add a new video game
+        /// <summary>
+        /// Adds a new video game.
+        /// </summary>
+        /// <param name="videoGame">The video game to add.</param>
+        /// <returns>The result of the operation.</returns>
         [Authorize(Roles = "admin")]
         [HttpPost]
         public IActionResult Post([FromBody] VideoGame videoGame)
         {
-            // Validation to check for duplicate name or ID
             if (_repository.GetAll().Any(vGame => vGame.Name.Equals(videoGame.Name, StringComparison.OrdinalIgnoreCase)))
             {
                 return Conflict("A video game with this name already exists.");
@@ -80,7 +88,6 @@ namespace Week4Lab.Controllers
                 return Conflict("A video game with this ID already exists.");
             }
 
-            // Validate required fields and price
             if (string.IsNullOrWhiteSpace(videoGame.Name) || string.IsNullOrWhiteSpace(videoGame.Platform))
             {
                 return BadRequest("The 'Name' and 'Platform' fields are required.");
@@ -91,81 +98,71 @@ namespace Week4Lab.Controllers
                 return BadRequest("The price cannot be negative.");
             }
 
-            // Validate platform restriction
             if (!videoGame.Platform.Equals("Xbox", StringComparison.OrdinalIgnoreCase) &&
                 !videoGame.Platform.Equals("Play Station", StringComparison.OrdinalIgnoreCase))
             {
                 return BadRequest("The platform must be 'Xbox' or 'Play Station'.");
             }
 
-            // Add the video game to the repository
             _repository.Add(videoGame);
 
-            // Prepare response data for JSON:API format
-
-            // Build the response in JSON:API format.
             var data = VideoGameResponseBuilder.BuildVideoGameResponseData(videoGame);
             var response = VideoGameResponseBuilder.BuildVideoGameResponse(data);
-            // Return the response
             return Ok(response);
         }
 
-        // Update an existing video game
+        /// <summary>
+        /// Updates an existing video game.
+        /// </summary>
+        /// <param name="id">The ID of the video game to update.</param>
+        /// <param name="videoGame">The updated video game data.</param>
+        /// <returns>The result of the operation.</returns>
         [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] VideoGame videoGame)
         {
-            // Retrieve the existing video game by ID from the repository
             var existingGame = _repository.GetById(id);
 
             if (existingGame != null)
             {
-                // Update the properties of the existing video game
                 existingGame.Name = videoGame.Name;
                 existingGame.Platform = videoGame.Platform;
                 existingGame.Price = videoGame.Price;
 
-                // Update the video game in the repository
                 _repository.Update(existingGame);
 
-
-                // Build the response in JSON:API format.
                 var data = VideoGameResponseBuilder.BuildVideoGameResponseData(existingGame);
                 var response = VideoGameResponseBuilder.BuildVideoGameResponse(data);
-                // Return the response
                 return Ok(response);
             }
             else
             {
-                // Return 404 Not Found if the video game is not found
                 return NotFound("No videogames were found.");
             }
         }
 
-        // Delete a video game by ID
+        /// <summary>
+        /// Deletes a video game by ID.
+        /// </summary>
+        /// <param name="id">The ID of the video game to delete.</param>
+        /// <returns>The result of the operation.</returns>
         [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            // Retrieve the existing video game by ID from the repository
             var existingGame = _repository.GetById(id);
 
             if (existingGame != null)
             {
-                // Delete the video game from the repository
                 _repository.Delete(id);
 
-
-                // Build the response in JSON:API format.
                 var data = VideoGameResponseBuilder.BuildVideoGameResponseData(existingGame);
                 var response = VideoGameResponseBuilder.BuildVideoGameResponse(data);
-                // Return the response
                 return Ok(response);
             }
             else
             {
-                // Return 404 Not Found if the video game is not found
-                return NotFound("No videgames were found.");
+                return NotFound("No videogames were found.");
             }
         }
     }

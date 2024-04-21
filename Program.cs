@@ -40,10 +40,6 @@ builder.Services.AddScoped<IVideoGameRepository, VideoGamePersistence>();
 builder.Services.AddScoped<IUserRepository, UserPersistence>();
 builder.Services.AddScoped<UserValidator>();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

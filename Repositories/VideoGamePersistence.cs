@@ -1,9 +1,16 @@
-﻿namespace Week4Lab.Models
+﻿using Week4Lab.Models;
+
+namespace Week4Lab.Repositories
 {
     public class VideoGamePersistence : IVideoGameRepository
     {
         //Initializes a List to store all the Games
-        private static List<VideoGame> _videoGames = new();
+        private static List<VideoGame> _videoGames = new List<VideoGame>
+        {
+            new VideoGame { Id = 1, Name = "Sailor Moon", Platform = "Xbox", Price = 12.99 },
+            new VideoGame { Id = 2, Name = "Naruto Shippuden", Platform = "Play Station", Price = 9.99 },
+            new VideoGame { Id = 3, Name = "Banjo Kazooie", Platform = "Play Station", Price = 3.09 }
+        };
 
         //Retrieves all video games.
         public IEnumerable<VideoGame> GetAll()

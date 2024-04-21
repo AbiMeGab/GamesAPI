@@ -1,4 +1,6 @@
-﻿namespace Week4Lab.Models
+﻿using Week4Lab.Models;
+
+namespace Week4Lab.Repositories
 {
     //Defines a VideoGame CRUD structure for data persistence in a RESTful API.
     public interface IVideoGameRepository

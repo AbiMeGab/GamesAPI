@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Week4Lab.Models;
+using Week4Lab.Repositories;
+using Week4Lab.Utilities;
 
 namespace Week4Lab.Controllers
 {
@@ -29,26 +32,12 @@ namespace Week4Lab.Controllers
 
             foreach (var game in videoGames)
             {
-                // Convert each video game to JSON:API format
-                responseData.Add(new
-                {
-                    type = "videoGames",
-                    id = game.Id.ToString(),
-                    attributes = new
-                    {
-                        name = game.Name,
-                        platform = game.Platform,
-                        price = game.Price
-                    }
-                });
+                // Build the response in JSON:API format.
+                var data = VideoGameResponseBuilder.BuildVideoGameResponseData(game);
+                responseData.Add(data);
             }
 
-            // Construct the response object
-            var response = new
-            {
-                data = responseData
-            };
-
+            var response = VideoGameResponseBuilder.BuildVideoGameResponse(responseData);
             // Return the response
             return Ok(response);
         }
@@ -62,36 +51,21 @@ namespace Week4Lab.Controllers
 
             if (game != null)
             {
-                // Prepare response data for JSON:API format
-                var responseData = new
-                {
-                    type = "videoGames",
-                    id = game.Id.ToString(),
-                    attributes = new
-                    {
-                        name = game.Name,
-                        platform = game.Platform,
-                        price = game.Price
-                    }
-                };
-
-                // Construct the response object
-                var response = new
-                {
-                    data = responseData
-                };
-
+                // Build the response in JSON:API format.
+                var data = VideoGameResponseBuilder.BuildVideoGameResponseData(game);
+                var response = VideoGameResponseBuilder.BuildVideoGameResponse(data);
                 // Return the response
                 return Ok(response);
             }
             else
             {
                 // Return 404 Not Found if the video game is not found
-                return NotFound();
+                return NotFound("No videogames were found.");
             }
         }
 
         // Add a new video game
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public IActionResult Post([FromBody] VideoGame videoGame)
         {
@@ -128,29 +102,16 @@ namespace Week4Lab.Controllers
             _repository.Add(videoGame);
 
             // Prepare response data for JSON:API format
-            var responseData = new
-            {
-                type = "videoGames",
-                id = videoGame.Id.ToString(),
-                attributes = new
-                {
-                    name = videoGame.Name,
-                    platform = videoGame.Platform,
-                    price = videoGame.Price
-                }
-            };
 
-            // Construct the response object
-            var response = new
-            {
-                data = responseData
-            };
-
+            // Build the response in JSON:API format.
+            var data = VideoGameResponseBuilder.BuildVideoGameResponseData(videoGame);
+            var response = VideoGameResponseBuilder.BuildVideoGameResponse(data);
             // Return the response
             return Ok(response);
         }
 
         // Update an existing video game
+        [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] VideoGame videoGame)
         {
@@ -167,36 +128,22 @@ namespace Week4Lab.Controllers
                 // Update the video game in the repository
                 _repository.Update(existingGame);
 
-                // Prepare response data for JSON:API format
-                var responseData = new
-                {
-                    type = "videoGames",
-                    id = existingGame.Id.ToString(),
-                    attributes = new
-                    {
-                        name = existingGame.Name,
-                        platform = existingGame.Platform,
-                        price = existingGame.Price
-                    }
-                };
 
-                // Construct the response object
-                var response = new
-                {
-                    data = responseData
-                };
-
+                // Build the response in JSON:API format.
+                var data = VideoGameResponseBuilder.BuildVideoGameResponseData(existingGame);
+                var response = VideoGameResponseBuilder.BuildVideoGameResponse(data);
                 // Return the response
                 return Ok(response);
             }
             else
             {
                 // Return 404 Not Found if the video game is not found
-                return NotFound();
+                return NotFound("No videogames were found.");
             }
         }
 
         // Delete a video game by ID
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -208,32 +155,17 @@ namespace Week4Lab.Controllers
                 // Delete the video game from the repository
                 _repository.Delete(id);
 
-                // Prepare response data for JSON:API format
-                var responseData = new
-                {
-                    type = "videoGames",
-                    id = existingGame.Id.ToString(),
-                    attributes = new
-                    {
-                        name = existingGame.Name,
-                        platform = existingGame.Platform,
-                        price = existingGame.Price
-                    }
-                };
 
-                // Construct the response object
-                var response = new
-                {
-                    data = responseData
-                };
-
+                // Build the response in JSON:API format.
+                var data = VideoGameResponseBuilder.BuildVideoGameResponseData(existingGame);
+                var response = VideoGameResponseBuilder.BuildVideoGameResponse(data);
                 // Return the response
                 return Ok(response);
             }
             else
             {
                 // Return 404 Not Found if the video game is not found
-                return NotFound();
+                return NotFound("No videgames were found.");
             }
         }
     }

@@ -1,0 +1,22 @@
+# Ignore compiled C# files
+*.dll
+*.exe
+*.pdb
+
+# Ignore output files from Visual Studio
+bin/
+obj/
+
+# Ignore configuration files
+*.user
+*.vsconfig
+
+# Ignore cache and dependency files
+*.cache
+packages/
+
+# Ignore automatically generated files
+*.log
+*.vs
+.vscode/
+*.tmp

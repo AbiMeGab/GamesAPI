@@ -108,4 +108,20 @@ This API was tested on Postman (for learning purposes) and with NUnit6.
 
 ![alt text](image-23.png)
 
+## Last Updates
+
+Code 201 Created, for the creation of a new game through the method GetById, that can be used at the same time to confirm the existence of the game that we add to the storage with the endpoint POST.
+
+![alt text](image-26.png)
+
+* Testing
+
+![alt text](image-27.png)
+
+1. Create two new games and return Code 201 Created.
+
+2. Verify that the games were created successfully and return Code 200 OK.
+
+3. Verify that the names of the games that were created coincide with the names of the games that were returned in the last check. 
+
 Thank you!

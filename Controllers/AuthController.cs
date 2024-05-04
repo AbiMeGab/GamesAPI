@@ -19,7 +19,7 @@ namespace Week4Lab.Controllers
         /// Initializes a new instance of the <see cref="AuthController"/> class.
         /// </summary>
         /// <param name="jwtSecret">The secret key used for JWT token generation.</param>
-        public AuthController(string? jwtSecret)
+        public AuthController(string jwtSecret)
         {
             this.jwtSecret = jwtSecret;
         }
@@ -29,7 +29,7 @@ namespace Week4Lab.Controllers
         /// </summary>
         /// <param name="user">The user for whom the token is generated.</param>
         /// <returns>A string representing the generated JWT token.</returns>
-        internal string GenerateJwtToken(User user)
+        public string GenerateJwtToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(jwtSecret);

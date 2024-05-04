@@ -108,7 +108,7 @@ namespace Week4Lab.Controllers
 
             var data = VideoGameResponseBuilder.BuildVideoGameResponseData(videoGame);
             var response = VideoGameResponseBuilder.BuildVideoGameResponse(data);
-            return Ok(response);
+            return CreatedAtAction(nameof(GetById), new { id = videoGame.Id }, response);
         }
 
         /// <summary>

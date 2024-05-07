@@ -1,0 +1,6 @@
+@Week4Lab_HostAddress = http://localhost:5230
+
+GET {{Week4Lab_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

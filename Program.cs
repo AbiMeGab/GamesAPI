@@ -5,6 +5,7 @@ using System.Text;
 using Week4Lab.Controllers;
 using Week4Lab.Repositories;
 using Week4Lab.Utilities;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,8 +42,15 @@ builder.Services.AddScoped<IUserRepository, UserPersistence>();
 builder.Services.AddScoped<UserValidator>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+});
 
 var app = builder.Build();
 

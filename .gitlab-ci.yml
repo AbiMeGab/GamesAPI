@@ -1,3 +1,6 @@
+stages:
+  - automated-api-tests
+
 automated-api-tests:
   stage: automated-api-tests
   image: cimg/base:2021.04
